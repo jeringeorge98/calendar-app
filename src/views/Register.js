@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Picker,
+  Alert,
 } from 'react-native';
 import {Header, Card, CardSection, Button} from '../components';
 export class Register extends Component {
@@ -17,6 +18,7 @@ export class Register extends Component {
       lname: '',
       gender: 'Gender',
       dob: '',
+      sport:'',
       city: 'City',
     };
   }
@@ -34,18 +36,33 @@ export class Register extends Component {
       });
     }
   };
+  handle = () => {
+    const {fname, lname, city, dob, gender} = this.state;
+    //alert(JSON.stringify(fname))
+    let data = {
+      fname: this.state.fname,
+      lname: this.state.lname,
+      gender: this.state.gender,
+      dob: this.state.dob,
+      city: this.state.city,
+      sport:this.state.sport
+    };
+    this.props.navigation.navigate('Calendar', {screen1: data});
+  };
   render() {
     return (
       <ScrollView>
         <Header
           name="Registration Form"
+          navigation={this.props.navigation}
           containerstyle={{backgroundColor: '#a69d9d'}}
           headertextstyle={{fontSize: 20, color: '#ffff'}}
         />
         <Card>
           <TextInput
             placeholder="First Name"
-            onChange={text => this.setState({fname: text})}
+            value={this.state.fname}
+            onChangeText={fname => this.setState({fname})}
             style={{
               borderBottomColor: 'grey',
               borderBottomWidth: 1,
@@ -55,7 +72,8 @@ export class Register extends Component {
           />
           <TextInput
             placeholder="Last Name"
-            onChange={text => this.setState({lname: text})}
+            value={this.state.lname}
+            onChangeText={lname => this.setState({lname})}
             style={{
               borderBottomColor: 'grey',
               borderBottomWidth: 1,
@@ -97,20 +115,18 @@ export class Register extends Component {
           <Text style={{color: 'grey', fontSize: 15, margin: 10}}>
             Add Your Sports
           </Text>
-          <Picker
-            //selectedValue={this.state.city}
+          <TextInput
+            //placeholder="Last Name"
+           // value={this.state.lname}
+            onChangeText={sport => this.setState({sport})}
             style={{
-              width: '100%',
-              height: 30,
-              borderBottomWidth: 5,
               borderBottomColor: 'grey',
+              borderBottomWidth: 1,
+              margin: 5,
+              fontSize: 18,
             }}
-            //onValueChange={item => this.handleValueChange2(item)}>
-          >
-            <Picker.Item label="" value="1" color="grey" />
-            <Picker.Item label="2" value="2" color="grey" />
-          </Picker>
-          <View style={styles.horizontalBorder} />
+          />
+          
           <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
             <Text
               style={{
@@ -123,12 +139,18 @@ export class Register extends Component {
             </Text>
           </View>
         </View>
-        <View style={{alignItems: 'center', justifyContent: 'center',padding:10,marginBottom:5}}>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 10,
+            marginBottom: 5,
+          }}>
           <Button
             style={styles.buttonStyle}
-            onPress={() => alert('register')}
+            onPress={() => this.handle()}
             title="Done"
-            buttonText={{color:'white',fontSize:18}}
+            buttonText={{color: 'white', fontSize: 18}}
           />
         </View>
       </ScrollView>
@@ -174,7 +196,7 @@ const styles = StyleSheet.create({
   buttonStyle: {
     borderRadius: 25,
     width: 150,
-    elevation:2,
+    elevation: 2,
     height: 50,
     backgroundColor: 'grey',
   },

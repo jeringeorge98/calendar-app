@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
-import Icon from "react-native-vector-icons/AntDesign"
+import Icon from 'react-native-vector-icons/AntDesign';
 const Header = props => {
   return (
     <View
@@ -23,19 +23,21 @@ const Header = props => {
           justifyContent: 'space-around',
           alignItems: 'center',
         }}>
-         <Icon
+        <Icon
           name="arrowleft"
-          color="#000"  
+          color="#000"
           size={20}
-         />
+          onPress={() => props.navigation.goBack()}
+        />
         <Text style={{...props.headertextstyle, fontWeight: 'bold'}}>
           {props.name}
         </Text>
         <Icon
           name="arrowright"
           color="#000"
-          size={20}  
-         />
+          size={20}
+          onPress={() => props.navigation.navigate('Calendar')}
+        />
       </View>
     </View>
   );
