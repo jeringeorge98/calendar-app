@@ -10,12 +10,20 @@ import {
 } from 'react-native';
 import {Header, Card, CardSection, Button} from '../components';
 import {Calendar, Agenda} from 'react-native-calendars';
+import {connect} from 'react-redux';
+import {addbooking} from '../redux/actions';
 import TimePicker from 'react-native-modal-datetime-picker';
 //import TimePicker from 'react-native-24h-timepicker';
 import Moment from 'moment';
 
 import Icon from 'react-native-vector-icons/AntDesign';
-export class Calendars extends Component {
+const mapStatetoProps = state => {
+  return {
+    day: state.addbookings.day,
+    bookingdata: state.addbookings.booking_data,
+  };
+};
+class Calendars extends Component {
   constructor(props) {
     super(props);
 
@@ -27,7 +35,9 @@ export class Calendars extends Component {
       day: '',
       screen1: {},
     };
+    //console.log(props);
   }
+
   // handleDayPress = date => {
   //   this.setState({
   //     items: date,
@@ -111,9 +121,7 @@ export class Calendars extends Component {
 
   renderItem = item => {
     return (
-      <TouchableOpacity
-        style={styles.style2}
-        onPress={() => alert(item.name)}>
+      <TouchableOpacity style={styles.style2} onPress={() => alert(item.name)}>
         <Text>{item.name}</Text>
         <Text>User:{item.User}</Text>
         <Text>Gender:{item.gender}</Text>
@@ -141,13 +149,14 @@ export class Calendars extends Component {
   };
   handleSave = () => {
     const {screen1} = this.state;
-    this.state.items[this.state.day] = [];
-    this.state.items[this.state.day].push({
+    const content = {
       name:
         'Booking for ' +
-        this.state.day +''+
+        this.state.day +
+        '' +
         'from' +
-        this.state.start_time +''+
+        this.state.start_time +
+        '' +
         'to' +
         this.state.endtime,
       start_time: this.state.start_time,
@@ -155,8 +164,27 @@ export class Calendars extends Component {
       User: screen1.fname + screen1.lname,
       gender: screen1.gender,
       sport: screen1.sport,
-      city: screen1.city
-    });
+      city: screen1.city,
+    };
+    this.props.addbooking(content, this.state.day);
+    // this.state.items[this.state.day] = [];
+    // this.state.items[this.state.day].push({
+    //   name:
+    //     'Booking for ' +
+    //     this.state.day +
+    //     '' +
+    //     'from' +
+    //     this.state.start_time +
+    //     '' +
+    //     'to' +
+    //     this.state.endtime,
+    //   start_time: this.state.start_time,
+    //   endtime: this.state.endtime,
+    //   User: screen1.fname + screen1.lname,
+    //   gender: screen1.gender,
+    //   sport: screen1.sport,
+    //   city: screen1.city,
+    // });
     Alert.alert('booking done');
     this.setState({});
   };
@@ -168,6 +196,7 @@ export class Calendars extends Component {
     );
   };
   render() {
+    console.log(this.props);
     return (
       <ScrollView>
         <Header
@@ -197,7 +226,7 @@ export class Calendars extends Component {
             // the list of items that have to be displayed in agenda. If you want to render item as empty date
             // the value of date key kas to be an empty array []. If there exists no value for date key it is
             // considered that the date in question is not yet loaded
-            items={this.state.items}
+            items={this.props.bookingdata}
             //selected={'2017-05-16'}
             // loadItemsForMonth={this.loadItems}
             renderItem={this.renderItem}
@@ -357,4 +386,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'grey',
   },
 });
-export default Calendars;
+export default connect(mapStatetoProps, {addbooking})(Calendars);
